@@ -14,7 +14,6 @@
 
 local WindUI = loadstring(game:HttpGet("https://github.com/Footagesus/WindUI/releases/latest/download/main.lua"))()
 
-WindUI:SetTheme("Amber")
 
 WindUI:Notify({
     Title = "DIAGEN 64",
@@ -36,7 +35,20 @@ local Window = WindUI:CreateWindow({
     Title = "DIAGEN 64 [v1] [robot64]", -- window title
     Icon = "door-open", -- lucide icon or "rbxassetid://" or URL. optional
     Folder = "diagen64",
-
+    Theme = "Amber",
+    OpenButton = {
+        Title = "DIAGEN64",
+        Icon = "monitor",
+        CornerRadius = UDim.new(0,16),
+        StrokeThickness = 2,
+        Color = ColorSequence.new( -- only gradient 
+            Color3.fromHex("FF0F7B"), 
+            Color3.fromHex("F89B29")
+        ),
+        OnlyMobile = false,
+        Enabled = true,
+        Draggable = true,
+    },
     BackgroundImageTransparency = 0.42,
 })
 
