@@ -1,1 +1,44 @@
+--[[
+
+╭─╮╭─╴╭─╮╷╭─╮╶┬╴╭─╴╶┬╮   ╭╮ ╷ ╷   ╶┬╴╷ ╷╭─╴╶┬╮╭─╮╭─╮╷  ╷
+╰─╮│  ├┬╯│├─╯ │ ├╴  ││   ├┴╮╰┬╯    │ ├─┤├╴  ││├─┤├┬╯│  │
+╰─╯╰─╴╵╰╴╵╵   ╵ ╰─╴╶┴╯   ╰─╯ ╵     ╵ ╵ ╵╰─╴╶┴╯╵ ╵╵╰╴╰─╴╵
+
+╷ ╷╭─╮╭─╴   ╭┬╮╭─╮╶┬╮╷╷ ╷╭┬╮   ╭─╮╭─╮   ╭─╮╷ ╷╷╭─╴╶┬╴   ╭─╴╭─╮╭─╮   ╭╮ ╭─╴╶┬╴╶┬╴╭─╴╭─╮   ╭─╴╭─╴╭─╴╭─╴╭─╴╶┬╴
+│ │╰─╮├╴    │││├─┤ ││││ ││││   │ │├┬╯   ╰─╮│╷││├╴  │    ├╴ │ │├┬╯   ├┴╮├╴  │  │ ├╴ ├┬╯   ├╴ ├╴ ├╴ ├╴ │   │ 
+╰─╯╰─╯╰─╴   ╵ ╵╵ ╵╶┴╯╵╰─╯╵ ╵   ╰─╯╵╰╴   ╰─╯╰┴╯╵╵   ╵    ╵  ╰─╯╵╰╴   ╰─╯╰─╴ ╵  ╵ ╰─╴╵╰╴   ╰─╴╵  ╵  ╰─╴╰─╴ ╵ 
+
+]]
+
+-- //STRINGS\\
+
+local WindUI = loadstring(game:HttpGet("https://github.com/Footagesus/WindUI/releases/latest/download/main.lua"))()
+
+WindUI:SetTheme("Amber")
+
+WindUI:Notify({
+    Title = "DIAGEN 64",
+    Content = "[✅] loading...",
+    Icon = "check-circle", -- lucide icon or "rbxassetid://". optional
+    Duration = 3,
+})
+
+task.wait(3)
+
+WindUI:Notify({
+    Title = "DIAGEN 64",
+    Content = "[✅] loaded! coded by thedarli",
+    Icon = "check-circle", -- lucide icon or "rbxassetid://". optional
+    Duration = 5,
+})
+
+local Window = WindUI:CreateWindow({
+    Title = "DIAGEN 64 [v1] [robot64]", -- window title
+    Icon = "door-open", -- lucide icon or "rbxassetid://" or URL. optional
+    Folder = "diagen64",
+
+    BackgroundImageTransparency = 0.42,
+})
+
+-- //SCRIPT\\
 
