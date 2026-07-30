@@ -63,16 +63,48 @@ local Window = WindUI:CreateWindow({
     BackgroundImageTransparency = 0.42,
 })
 
+-- //FUNCTIONS\\
+
+local function room(msg)
+    local humroot = workspace.char
+    
+    local RS = game.ReplicatedStorage
+    local rooms = RS.Assets.mapdebris
+    local room = rooms[msg]:Clone()
+
+    humroot.Anchored = true
+    room.Parent = workspace
+    humroot.CFrame = room.TeleMap.CFrame
+    task.wait(1)
+    humroot.Anchored = false
+    task.wait(2)
+    room:Destroy()
+end
+local function telemap(msg)
+    local humroot = workspace.char
+
+    for i,v in ipairs(workspace.hub:GetDescendants()) do
+        if v:IsA("BasePart") and v.Name == "TeleMap" then
+            if v.to.Value == msg then
+                humroot.Anchored = true
+                humroot.CFrame = v.CFrame
+                task.wait(1)
+                humroot.Anchored = false
+            end
+        end
+    end
+end
+
 -- //SCRIPT\\
 
 local humroot = workspace.char
 
-local PlayerTag = Window:Tag({
-    Title = game.Players.LocalPlayer.Name,
-    Color = Color3.fromRGB(0, 0, 153),
-})
 local FPSTag = Window:Tag({
     Title = "FPS: 0",
+})
+local PlayerTag = Window:Tag({
+    Title = game.Players.LocalPlayer.Name,
+    Color = Color3.fromRGB(255, 128, 0),
 })
  
 local RunService = game:GetService("RunService")
@@ -128,6 +160,11 @@ local Screen = Window:Tab({
     Icon = "fullscreen", --optional
 })
 
+local Spawner = Window:Tab({
+    Title = "Spawner",
+    Icon = "apple", --optional
+})
+
 local Preferences = Window:Tab({
     Title = "Preferences",
     Icon = "option", -- optional
@@ -136,6 +173,11 @@ local Preferences = Window:Tab({
 local Credits = Window:Tab({
     Title = "Credits",
     Icon = "newspaper", -- optional
+})
+
+About:Paragraph({
+    Title = "Tips",
+    Desc = "If your mouse gets locked when you turn on the cheat, try pressing N to unlock it."
 })
 
 Player:Section({
@@ -188,6 +230,27 @@ local Button = Player:Button({
     Callback = function()
         humroot.CFrame = humroot.CFrame+Vector3.new(0, 0, -15)
     end
+})
+
+Player:Section({
+    Title = "Attributes"
+})
+
+local Toggle = Player:Toggle({
+    Title = "Noclip",
+    Value = false,
+    Callback = function(state)
+        if state == false then
+            workspace.char.CanCollide = true
+        end
+        if state == true then
+            workspace.char.CanCollide = false
+        end
+    end
+})
+
+Player:Section({
+    Title = "Player Editor"
 })
 
 Saves:Section({
@@ -354,4 +417,359 @@ local Button = Saves:Button({
             }
         })
     end,
+})
+
+Maps:Section({
+    Title = "Hub Rooms"
+})
+
+local Button = Maps:Button({
+    Title = "Turtle Tops",
+    Callback = function()
+        room("room1")
+    end
+})
+local Button = Maps:Button({
+    Title = "Knoddy's Resort",
+    Callback = function()
+        room("room2")
+    end
+})
+local Button = Maps:Button({
+    Title = "The Hecklands",
+    Callback = function()
+        room("room3")
+    end
+})
+local Button = Maps:Button({
+    Title = "Candy Aquarium",
+    Callback = function()
+        room("room4")
+    end
+})
+local Button = Maps:Button({
+    Title = "New Neocity",
+    Callback = function()
+        room("room6")
+    end
+})
+local Button = Maps:Button({
+    Title = "Tinyhuge Bedroom",
+    Callback = function()
+        room("room7")
+    end
+})
+
+local Button = Maps:Button({
+    Title = "Planet Kebabulon",
+    Callback = function()
+        telemap("kebab")
+    end
+})
+
+Maps:Section({
+    Title = "Street Rooms"
+})
+
+local Button = Maps:Button({
+    Title = "MAKE",
+    Callback = function()
+        telemap("make")
+    end
+})
+local Button = Maps:Button({
+    Title = "MODS",
+    Callback = function()
+        telemap("mods")
+    end
+})
+local Button = Maps:Button({
+    Title = "TEST MAP",
+    Callback = function()
+        telemap("testmap")
+    end
+})
+local Button = Maps:Button({
+    Title = "Tutorial",
+    Callback = function()
+        telemap("tutorial")
+    end
+})
+
+Maps:Section({
+    Title = "Secrets Rooms"
+})
+
+local Button = Maps:Button({
+    Title = "Slide",
+    Callback = function()
+        telemap("slide")
+    end
+})
+
+Maps:Section({
+    Title = "Bonus Rooms"
+})
+
+local Button = Maps:Button({
+    Title = "Snozone Cave",
+    Callback = function()
+        telemap("snozone")
+    end
+})
+local Button = Maps:Button({
+    Title = "Buzz Factory",
+    Callback = function()
+        telemap("buzz")
+    end
+})
+
+Screen:Section({
+    Title = "HumRoot Manipulations"
+})
+
+local Slider = Screen:Slider({
+    Title = "HumRoot Transparency",
+    Value = {
+        Min = 0,
+        Max = 1,
+        Default = 1
+    },
+    Step = 0.1,
+    Callback = function(value)
+        workspace.char.Transparency = value
+    end
+})
+local Colorpicker = Screen:Colorpicker({
+    Title = "HumRoot Color",
+    Default = Color3.fromRGB(255, 0, 0), -- default color. optional
+    Locked = false, -- disable colorpicker. optional
+    Flag = "custom_color", -- for config saving. optional
+    Callback = function(color)
+        workspace.char.Color = color
+    end
+})
+
+Spawner:Section({
+    Title = "Objects"
+})
+
+local Button = Spawner:Button({
+    Title = "Snowball 1",
+    Callback = function()
+        local it = game.ReplicatedStorage.Assets.maps.hub.picks.snowman1:Clone()
+        it.Parent = workspace
+        it.CFrame = humroot.CFrame
+    end
+})
+local Button = Spawner:Button({
+    Title = "Snowball 2",
+    Callback = function()
+        local it = game.ReplicatedStorage.Assets.maps.hub.picks.snowman2:Clone()
+        it.Parent = workspace
+        it.CFrame = humroot.CFrame
+    end
+})
+local Button = Spawner:Button({
+    Title = "Plate",
+    Callback = function()
+        local it = game.ReplicatedStorage.Assets.maps.MAKE.place.P2:Clone()
+        it.Parent = workspace
+        it.CFrame = humroot.CFrame
+    end
+})
+local Button = Spawner:Button({
+    Title = "Lava",
+    Callback = function()
+        local it = game.ReplicatedStorage.Assets.maps.obby2.lava:Clone()
+        it.Parent = workspace
+        it.CFrame = humroot.CFrame
+    end
+})
+
+Spawner:Section({
+    Title = "Items"
+})
+
+local Button = Spawner:Button({
+    Title = "Flamethrower",
+    Callback = function()
+        local it = game.ReplicatedStorage.Assets.maps.hub.flamethrower:Clone()
+        it.Parent = workspace
+        it.CFrame = humroot.CFrame
+    end
+})
+local Button = Spawner:Button({
+    Title = "Skateboard",
+    Callback = function()
+        local it = game.ReplicatedStorage.Assets.maps.hub.skateboard:Clone()
+        it.Parent = workspace
+        it.CFrame = humroot.CFrame
+    end
+})
+local Button = Spawner:Button({
+    Title = "Jetpack",
+    Callback = function()
+        local it = game.ReplicatedStorage.Assets.maps.hub.jetpack:Clone()
+        it.Parent = workspace
+        it.CFrame = humroot.CFrame
+    end
+})
+local Button = Spawner:Button({
+    Title = "Battery",
+    Callback = function()
+        local it = game.ReplicatedStorage.Assets.battery:Clone()
+        it.Parent = workspace
+        it.CFrame = humroot.CFrame
+    end
+})
+local Button = Spawner:Button({
+    Title = "Egg",
+    Callback = function()
+        local it = game.ReplicatedStorage.Assets.egg:Clone()
+        it.Parent = workspace
+        it.CFrame = humroot.CFrame
+    end
+})
+local Button = Spawner:Button({
+    Title = "IceCream",
+    Callback = function()
+        local it = game.ReplicatedStorage.Assets.notcream:Clone()
+        it.Parent = workspace
+        it.CFrame = humroot.CFrame
+    end
+})
+
+Spawner:Section({
+    Title = "Custom Portal"
+})
+
+Spawner:Paragraph({
+    Title = "Tip",
+    Desc = "First, enter the name of the map in the map field, then create the portal."
+})
+Spawner:Paragraph({
+    Title = "Fact",
+    Desc = "I'm too lazy to write out each map name for you, use DEX Explorer for this, go to this path: game.ReplicatedStorage.Assets.maps and view map names",
+})
+
+local portalvalue = nil
+
+local Input = Spawner:Input({
+    Title = "Portal Map",
+    Callback = function(text)
+        portalvalue = text
+    end
+})
+ 
+local Button = Spawner:Button({
+    Title = "Portal Spawn",
+    Callback = function(value)
+        local custportal = game.ReplicatedStorage.Assets.TeleMap:Clone()
+        custportal.Parent = workspace
+        print(portalvalue)
+        custportal.to.Value = portalvalue
+        local attach = game.ReplicatedStorage.Assets.maps.slide.TeleMap.Attachment
+        local mesh = game.ReplicatedStorage.Assets.maps.slide.TeleMap.Mesh
+        attach:Clone().Parent = custportal
+        mesh:Clone().Parent = custportal
+        custportal.Color = Color3.fromRGB(80, 48, 127)
+        custportal.Transparency = 0
+        custportal.CFrame = humroot.CFrame+Vector3.new(5, 0, 0)
+    end
+})
+
+Preferences:Section({
+    Title = "IceCreams"
+})
+
+local Button = Preferences:Button({
+    Title = "Collect all IceCreams on level",
+    Callback = function()
+        for i,v in ipairs(workspace:GetDescendants()) do
+            if v:IsA("MeshPart") and v.Name == "notcream" then
+                local TW = game:GetService("TweenService")
+                TW:Create(humroot, TweenInfo.new(0.3, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut), {
+                    ["CFrame"] = v.CFrame
+                }):Play()
+            end
+        end
+    end
+})
+
+Preferences:Section({
+    Title = "Other"
+})
+
+local Button = Preferences:Button({
+    Title = "Rejoin ROBOT64",
+    Callback = function()
+                            local Popup = WindUI:Popup({
+                        Title = "DIAGEN 64",
+                        Icon = "rbxassetid://128620314150520", -- lucide icon or "rbxassetid://". optional
+                        Content = "You really want rejoin???",
+                        Buttons = {
+                        {
+                             Title = "Yes",
+                             Icon = "check", -- optional
+                             Variant = "Primary", -- "Primary", "Secondary", "Tertiary". optional
+                             Callback = function()
+                                print("Proceeding...")
+                                local TeleportService = game:GetService("TeleportService")
+	                            local placeId = 1111083356
+	                            local player = game.Players.LocalPlayer
+
+	                            TeleportService:Teleport(placeId, player)
+                            end
+                        },
+                        {
+                            Title = "No",
+                            Icon = "x", -- optional
+                            Variant = "Secondary", -- optional
+                            Callback = function()
+                               print("Cancelled")
+                            end
+                        }
+                       }
+                    })
+    end
+})
+local Button = Preferences:Button({
+    Title = "Disable DIAGEN 64",
+    Callback = function()
+                            local Popup = WindUI:Popup({
+                        Title = "DIAGEN 64",
+                        Icon = "rbxassetid://128620314150520", -- lucide icon or "rbxassetid://". optional
+                        Content = "You really want disable DIAGEN 64???",
+                        Buttons = {
+                        {
+                             Title = "Yes",
+                             Icon = "check", -- optional
+                             Variant = "Primary", -- "Primary", "Secondary", "Tertiary". optional
+                             Callback = function()
+                                print("Proceeding...")
+                                    Window:Destroy()
+                            end
+                        },
+                        {
+                            Title = "No",
+                            Icon = "x", -- optional
+                            Variant = "Secondary", -- optional
+                            Callback = function()
+                               print("Cancelled")
+                            end
+                        }
+                       }
+                    })
+    end
+})
+
+Credits:Paragraph({
+    Title = "thedarli/darli_17 (ValerikRob)",
+    Desc = "CODER"
+})
+
+About:Paragraph({
+    Title = "Footagesus",
+    Desc = "UI Library for cheat"
 })
