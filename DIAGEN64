@@ -18,7 +18,7 @@ local WindUI = loadstring(game:HttpGet("https://github.com/Footagesus/WindUI/rel
 WindUI:Notify({
     Title = "DIAGEN 64",
     Content = "[✅] loading...",
-    Icon = "check-circle", -- lucide icon or "rbxassetid://". optional
+    Icon = "rbxassetid://128620314150520", -- lucide icon or "rbxassetid://". optional
     Duration = 3,
 })
 
@@ -27,18 +27,29 @@ task.wait(3)
 WindUI:Notify({
     Title = "DIAGEN 64",
     Content = "[✅] loaded! coded by thedarli",
-    Icon = "check-circle", -- lucide icon or "rbxassetid://". optional
+    Icon = "rbxassetid://128620314150520", -- lucide icon or "rbxassetid://". optional
     Duration = 5,
 })
 
+-- //CURSOR FIX\\
+
+local plrgui = game.Players.LocalPlayer.PlayerGui
+local coregui = game:GetService("CoreGui")
+
+local cursorClone = plrgui.Cursor:Clone()
+local cursor = plrgui.Cursor
+
+cursorClone.Parent = coregui
+cursor.UI.ImageTransparency = 1
+
 local Window = WindUI:CreateWindow({
     Title = "DIAGEN 64 [v1] [robot64]", -- window title
-    Icon = "door-open", -- lucide icon or "rbxassetid://" or URL. optional
+    Icon = "rbxassetid://128620314150520", -- lucide icon or "rbxassetid://" or URL. optional
     Folder = "diagen64",
     Theme = "Amber",
     OpenButton = {
         Title = "DIAGEN64",
-        Icon = "monitor",
+        Icon = "rbxassetid://128620314150520",
         CornerRadius = UDim.new(0,16),
         StrokeThickness = 2,
         Color = ColorSequence.new( -- only gradient 
@@ -54,9 +65,14 @@ local Window = WindUI:CreateWindow({
 
 -- //SCRIPT\\
 
+local humroot = workspace.char
+
+local PlayerTag = Window:Tag({
+    Title = game.Players.LocalPlayer.Name,
+    Color = Color3.fromRGB(0, 0, 153),
+})
 local FPSTag = Window:Tag({
     Title = "FPS: 0",
-    Color = Color3.fromRGB(100, 150, 255),
 })
  
 local RunService = game:GetService("RunService")
@@ -64,6 +80,8 @@ local lastUpdate = tick()
 local frameCount = 0
  
 RunService.RenderStepped:Connect(function()
+    game.CoreGui.Cursor.UI.Position = game.Players.LocalPlayer.PlayerGui.Cursor.UI.Position
+
     frameCount = frameCount + 1
     local now = tick()
     
@@ -84,3 +102,256 @@ RunService.RenderStepped:Connect(function()
         lastUpdate = now
     end
 end)
+
+local About = Window:Tab({
+    Title = "About",
+    Icon = "notebook-text", -- optional
+})
+
+local Player = Window:Tab({
+    Title = "Player",
+    Icon = "box", -- optional
+})
+
+local Saves = Window:Tab({
+    Title = "Saves",
+    Icon = "door-closed", -- optional
+})
+
+local Maps = Window:Tab({
+    Title = "Maps",
+    Icon = "earth", -- optional
+})
+
+local Screen = Window:Tab({
+    Title = "Screen",
+    Icon = "fullscreen", --optional
+})
+
+local Preferences = Window:Tab({
+    Title = "Preferences",
+    Icon = "option", -- optional
+})
+
+local Credits = Window:Tab({
+    Title = "Credits",
+    Icon = "newspaper", -- optional
+})
+
+Player:Section({
+    Title = "Position Buttons +"
+})
+
+local Button = Player:Button({
+    Title = "+X",
+    Icon = "arrow-up",
+    Callback = function()
+        humroot.CFrame = humroot.CFrame+Vector3.new(15, 0, 0)
+    end
+})
+local Button = Player:Button({
+    Title = "+Y",
+    Icon = "arrow-up",
+    Callback = function()
+        humroot.CFrame = humroot.CFrame+Vector3.new(0, 15, 0)
+    end
+})
+local Button = Player:Button({
+    Title = "+Z",
+    Icon = "arrow-up",
+    Callback = function()
+        humroot.CFrame = humroot.CFrame+Vector3.new(0, 0, 15)
+    end
+})
+
+Player:Section({
+    Title = "Position Buttons -"
+})
+
+local Button = Player:Button({
+    Title = "-X",
+    Icon = "arrow-up",
+    Callback = function()
+        humroot.CFrame = humroot.CFrame+Vector3.new(-15, 0, 0)
+    end
+})
+local Button = Player:Button({
+    Title = "-Y",
+    Icon = "arrow-up",
+    Callback = function()
+        humroot.CFrame = humroot.CFrame+Vector3.new(0, -15, 0)
+    end
+})
+local Button = Player:Button({
+    Title = "-Z",
+    Icon = "arrow-up",
+    Callback = function()
+        humroot.CFrame = humroot.CFrame+Vector3.new(0, 0, -15)
+    end
+})
+
+Saves:Section({
+    Title = "Progress"
+})
+
+local Button = Saves:Button({
+    Title = "100% Save File",
+    Icon = "save",
+    Callback = function()
+        local Popup = WindUI:Popup({
+            Title = "Your progress will be deleted. Continue???",
+            Icon = "rbxassetid://128620314150520", -- lucide icon or "rbxassetid://". optional
+            Buttons = {
+                {
+                 Title = "Yes",
+                 Icon = "check", -- optional
+                 Variant = "Primary", -- "Primary", "Secondary", "Tertiary". optional
+                 Callback = function()
+                    print("Proceeding...")
+                    WindUI:Notify({
+                        Title = "Operation has started...",
+                        Icon = "rbxassetid://128620314150520",
+                        Content = "Please wait...",
+                        Duration = 5
+                     })
+                    task.wait(5)
+                    local args = {
+                        [1] = {
+                            [1] = "42069000000",
+                            [2] = "121111111111111111111",
+                            [3] = "1111111111111121111111111111111111111110",
+                            [4] = "5",
+                            [5] = "1111111111111111111111111111111111111111111111111111111111111111",
+                            [6] = "420699999",
+                            [7] = "1000",
+                            [8] = "0,",
+                            [9] = "0,",
+                            [10] = 3
+                        } 
+                    }
+
+                    game.ReplicatedStorage.Remotes:WaitForChild("save"):FireServer(unpack(args))
+
+                    local Popup = WindUI:Popup({
+                        Title = "Operation success!",
+                        Icon = "rbxassetid://128620314150520", -- lucide icon or "rbxassetid://". optional
+                        Content = "You need to rejoin for apply changes. Rejoin???",
+                        Buttons = {
+                        {
+                             Title = "Yes",
+                             Icon = "check", -- optional
+                             Variant = "Primary", -- "Primary", "Secondary", "Tertiary". optional
+                             Callback = function()
+                                print("Proceeding...")
+                                local TeleportService = game:GetService("TeleportService")
+	                            local placeId = 1111083356
+	                            local player = game.Players.LocalPlayer
+
+	                            TeleportService:Teleport(placeId, player)
+                            end
+                        },
+                        {
+                            Title = "No",
+                            Icon = "x", -- optional
+                            Variant = "Secondary", -- optional
+                            Callback = function()
+                               print("Cancelled")
+                            end
+                        }
+                       }
+                    })
+                 end
+                },
+                {
+                Title = "No",
+                 Icon = "x", -- optional
+                 Variant = "Secondary", -- "Primary", "Secondary", "Tertiary". optional
+                 Callback = function()
+                    print("Canceled")
+                 end
+                }
+            }
+        })
+    end,
+})
+
+local Button = Saves:Button({
+    Title = "Reset Save File",
+    Icon = "save",
+    Callback = function()
+        local Popup = WindUI:Popup({
+            Title = "WARNING: You may lose all your progress. Continue???",
+            Icon = "rbxassetid://128620314150520", -- lucide icon or "rbxassetid://". optional
+            Buttons = {
+                {
+                 Title = "Yes",
+                 Icon = "check", -- optional
+                 Variant = "Primary", -- "Primary", "Secondary", "Tertiary". optional
+                 Callback = function()
+                    print("Proceeding...")
+                    WindUI:Notify({
+                        Title = "Operation has started...",
+                        Icon = "rbxassetid://128620314150520",
+                        Content = "Please wait...",
+                        Duration = 5
+                     })
+                    task.wait(5)
+                    local args = {
+                        [1] = {
+                            [1] = "0",
+                            [2] = "0",
+                            [3] = "0",
+                            [4] = "0",
+                            [5] = "0",
+                            [6] = "0",
+                            [7] = "0",
+                            [8] = "0,",
+                            [9] = "0,",
+                            [10] = 0
+                        } 
+                    }
+
+                    game.ReplicatedStorage.Remotes:WaitForChild("save"):FireServer(unpack(args))
+
+                    local Popup = WindUI:Popup({
+                        Title = "Operation success!",
+                        Icon = "rbxassetid://128620314150520", -- lucide icon or "rbxassetid://". optional
+                        Content = "You need to rejoin for apply changes. Rejoin???",
+                        Buttons = {
+                        {
+                             Title = "Yes",
+                             Icon = "check", -- optional
+                             Variant = "Primary", -- "Primary", "Secondary", "Tertiary". optional
+                             Callback = function()
+                                print("Proceeding...")
+                                local TeleportService = game:GetService("TeleportService")
+	                            local placeId = 1111083356
+	                            local player = game.Players.LocalPlayer
+
+	                            TeleportService:Teleport(placeId, player)
+                            end
+                        },
+                        {
+                            Title = "No",
+                            Icon = "x", -- optional
+                            Variant = "Secondary", -- optional
+                            Callback = function()
+                               print("Cancelled")
+                            end
+                        }
+                       }
+                    })
+                 end
+                },
+                {
+                Title = "No",
+                 Icon = "x", -- optional
+                 Variant = "Secondary", -- "Primary", "Secondary", "Tertiary". optional
+                 Callback = function()
+                    print("Canceled")
+                 end
+                }
+            }
+        })
+    end,
+})
