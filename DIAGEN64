@@ -146,8 +146,8 @@ local Player = Window:Tab({
 })
 
 local Saves = Window:Tab({
-    Title = "Saves",
-    Icon = "door-closed", -- optional
+    Title = "Progress",
+    Icon = "save", -- optional
 })
 
 local Maps = Window:Tab({
@@ -155,9 +155,9 @@ local Maps = Window:Tab({
     Icon = "earth", -- optional
 })
 
-local Screen = Window:Tab({
-    Title = "Screen",
-    Icon = "fullscreen", --optional
+local Audio = Window:Tab({
+    Title = "Audio",
+    Icon = "audio-waveform", --optional
 })
 
 local Spawner = Window:Tab({
@@ -168,6 +168,11 @@ local Spawner = Window:Tab({
 local Preferences = Window:Tab({
     Title = "Preferences",
     Icon = "option", -- optional
+})
+
+local Manip = Window:Tab({
+    Title = "Manipulations",
+    Icon = "anvil", -- optional
 })
 
 local Credits = Window:Tab({
@@ -250,11 +255,102 @@ local Toggle = Player:Toggle({
 })
 
 Player:Section({
-    Title = "Player Editor"
+    Title = "Player Editor [UNFINISHED, VERY BUGGY]"
+})
+
+local character = workspace.vis
+
+local Colorpicker = Player:Colorpicker({
+    Title = "Head Color",
+    Default = character.head.Color, -- default color. optional
+    Locked = false, -- disable colorpicker. optional
+    Flag = "custom_color", -- for config saving. optional
+    Callback = function(color)
+        character.head.Color = color
+    end
+})
+local Colorpicker = Player:Colorpicker({
+    Title = "Torso Color",
+    Default = character.torso.Color, -- default color. optional
+    Locked = false, -- disable colorpicker. optional
+    Flag = "custom_color", -- for config saving. optional
+    Callback = function(color)
+        character.torso.Color = color
+    end
+})
+
+local Colorpicker = Player:Colorpicker({
+    Title = "Right Sleeve Color",
+    Default = character.armA.Color, -- default color. optional
+    Locked = false, -- disable colorpicker. optional
+    Flag = "custom_color", -- for config saving. optional
+    Callback = function(color)
+        character.armA.Color = color
+    end
+})
+
+local Colorpicker = Player:Colorpicker({
+    Title = "Left Sleeve Color",
+    Default = character.armB.Color, -- default color. optional
+    Locked = false, -- disable colorpicker. optional
+    Flag = "custom_color", -- for config saving. optional
+    Callback = function(color)
+        character.armB.Color = color
+    end
+})
+
+local Colorpicker = Player:Colorpicker({
+    Title = "Right Arm Color",
+    Default = character.armC.Color, -- default color. optional
+    Locked = false, -- disable colorpicker. optional
+    Flag = "custom_color", -- for config saving. optional
+    Callback = function(color)
+        character.armC.Color = color
+    end
+})
+
+local Colorpicker = Player:Colorpicker({
+    Title = "Left Arm Color",
+    Default = character.armD.Color, -- default color. optional
+    Locked = false, -- disable colorpicker. optional
+    Flag = "custom_color", -- for config saving. optional
+    Callback = function(color)
+        character.armD.Color = color
+    end
+})
+
+local Colorpicker = Player:Colorpicker({
+    Title = "Right Leg Color",
+    Default = character.legA.Color, -- default color. optional
+    Locked = false, -- disable colorpicker. optional
+    Flag = "custom_color", -- for config saving. optional
+    Callback = function(color)
+        character.legA.Color = color
+    end
+})
+
+local Colorpicker = Player:Colorpicker({
+    Title = "Left Leg Color",
+    Default = character.legB.Color, -- default color. optional
+    Locked = false, -- disable colorpicker. optional
+    Flag = "custom_color", -- for config saving. optional
+    Callback = function(color)
+        character.legB.Color = color
+    end
+})
+
+local Colorpicker = Player:Colorpicker({
+    Title = "Dot Color",
+    Default = character.dot.Color, -- default color. optional
+    Locked = false, -- disable colorpicker. optional
+    Flag = "custom_color", -- for config saving. optional
+    Callback = function(color)
+        character.dot.Color = color
+    end
 })
 
 Saves:Section({
-    Title = "Progress"
+    Title = "Saves"
 })
 
 local Button = Saves:Button({
@@ -419,6 +515,25 @@ local Button = Saves:Button({
     end,
 })
 
+
+Saves:Section({
+    Title = "Progress"
+})
+
+local Button = Saves:Button({
+    Title = "Collect all IceCreams on level ",
+    Callback = function()
+        for i,v in ipairs(workspace:GetDescendants()) do
+            if v:IsA("MeshPart") and v.Name == "notcream" then
+                local TW = game:GetService("TweenService")
+                TW:Create(humroot, TweenInfo.new(0.3, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut), {
+                    ["CFrame"] = v.CFrame
+                }):Play()
+            end
+        end
+    end
+})
+
 Maps:Section({
     Title = "Hub Rooms"
 })
@@ -524,32 +639,6 @@ local Button = Maps:Button({
     end
 })
 
-Screen:Section({
-    Title = "HumRoot Manipulations"
-})
-
-local Slider = Screen:Slider({
-    Title = "HumRoot Transparency",
-    Value = {
-        Min = 0,
-        Max = 1,
-        Default = 1
-    },
-    Step = 0.1,
-    Callback = function(value)
-        workspace.char.Transparency = value
-    end
-})
-local Colorpicker = Screen:Colorpicker({
-    Title = "HumRoot Color",
-    Default = Color3.fromRGB(255, 0, 0), -- default color. optional
-    Locked = false, -- disable colorpicker. optional
-    Flag = "custom_color", -- for config saving. optional
-    Callback = function(color)
-        workspace.char.Color = color
-    end
-})
-
 Spawner:Section({
     Title = "Objects"
 })
@@ -621,6 +710,8 @@ local Button = Spawner:Button({
         local it = game.ReplicatedStorage.Assets.battery:Clone()
         it.Parent = workspace
         it.CFrame = humroot.CFrame
+        it.Anchored = false
+        it.CanCollide = true
     end
 })
 local Button = Spawner:Button({
@@ -629,6 +720,8 @@ local Button = Spawner:Button({
         local it = game.ReplicatedStorage.Assets.egg:Clone()
         it.Parent = workspace
         it.CFrame = humroot.CFrame
+        it.Anchored = false
+        it.CanCollide = true
     end
 })
 local Button = Spawner:Button({
@@ -636,7 +729,7 @@ local Button = Spawner:Button({
     Callback = function()
         local it = game.ReplicatedStorage.Assets.notcream:Clone()
         it.Parent = workspace
-        it.CFrame = humroot.CFrame
+        it.CFrame = humroot.CFrame+Vector3.new(5, 0, 0)
     end
 })
 
@@ -679,21 +772,70 @@ local Button = Spawner:Button({
     end
 })
 
-Preferences:Section({
-    Title = "IceCreams"
+
+local ss = game.SoundService
+
+local Slider = Preferences:Slider({
+    Title = "Music",
+    Value = {
+        Min = 0, -- minimum value
+        Max = 1, -- maximum value
+        Default = 1 -- initial value
+    },
+    Step = 0.1,
+    Callback = function(value)
+        ss.Music.Volume = value
+    end
+})
+local Slider = Preferences:Slider({
+    Title = "Player Sounds",
+    Value = {
+        Min = 0, -- minimum value
+        Max = 1, -- maximum value
+        Default = 1 -- initial value
+    },
+    Step = 0.1,
+    Callback = function(value)
+        ss.Sounds.Volume = value
+    end
 })
 
-local Button = Preferences:Button({
-    Title = "Collect all IceCreams on level",
-    Callback = function()
-        for i,v in ipairs(workspace:GetDescendants()) do
-            if v:IsA("MeshPart") and v.Name == "notcream" then
-                local TW = game:GetService("TweenService")
-                TW:Create(humroot, TweenInfo.new(0.3, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut), {
-                    ["CFrame"] = v.CFrame
-                }):Play()
-            end
-        end
+local Slider = Preferences:Slider({
+    Title = "Sounds",
+    Value = {
+        Min = 0, -- minimum value
+        Max = 1, -- maximum value
+        Default = 1 -- initial value
+    },
+    Step = 0.1,
+    Callback = function(value)
+        ss.Sounds.Volume = value
+    end
+})
+
+Preferences:Section({
+    Title = "Player Manipulations"
+})
+
+local Slider = Preferences:Slider({
+    Title = "HumRoot Transparency",
+    Value = {
+        Min = 0,
+        Max = 1,
+        Default = 1
+    },
+    Step = 0.1,
+    Callback = function(value)
+        workspace.char.Transparency = value
+    end
+})
+local Colorpicker = Preferences:Colorpicker({
+    Title = "HumRoot Color",
+    Default = Color3.fromRGB(255, 0, 0), -- default color. optional
+    Locked = false, -- disable colorpicker. optional
+    Flag = "custom_color", -- for config saving. optional
+    Callback = function(color)
+        workspace.char.Color = color
     end
 })
 
@@ -764,12 +906,116 @@ local Button = Preferences:Button({
     end
 })
 
+local Button = Manip:Button({
+    Title = "Start BFMA [BIG FORCE MIDDLE ABUSING]",
+    Callback = function()
+        humroot.VectorForce.RelativeTo = "Attachment0"
+        WindUI:Notify({
+            Title = "DIAGEN 64",
+            Content = "[✅] Operation started!",
+            Icon = "rbxassetid://128620314150520",
+            Duration = 3,
+        })  
+        WindUI:Notify({
+            Title = "DIAGEN 64",
+            Content = "[✅] 🍙🍙🍙🍙🍙🍙🍙🍙🍙🍙🍙🍙🍙🍙🍙🍙🍙🍙🍙🍙🍙🍙",
+            Icon = "rbxassetid://128620314150520",
+            Duration = 3,
+        })  
+                WindUI:Notify({
+            Title = "DIAGEN 64",
+            Content = "[✅] 🍙🍙🍙🍙🍙🍙🍙🍙🍙🍙🍙🍙🍙🍙🍙🍙🍙🍙🍙🍙🍙🍙",
+            Icon = "rbxassetid://128620314150520",
+            Duration = 3,
+        })  
+                WindUI:Notify({
+            Title = "DIAGEN 64",
+            Content = "[✅] 🍙🍙🍙🍙🍙🍙🍙🍙🍙🍙🍙🍙🍙🍙🍙🍙🍙🍙🍙🍙🍙🍙",
+            Icon = "rbxassetid://128620314150520",
+            Duration = 3,
+        })  
+                WindUI:Notify({
+            Title = "DIAGEN 64",
+            Content = "[✅] 🍙🍙🍙🍙🍙🍙🍙🍙🍙🍙🍙🍙🍙🍙🍙🍙🍙🍙🍙🍙🍙🍙",
+            Icon = "rbxassetid://128620314150520",
+            Duration = 3,
+        })  
+        humroot.VectorForce.Force = Vector3.new(15555,0,0)
+        task.wait(0.)
+        humroot.VectorForce.Force = Vector3.new(0,15555,0)
+                humroot.VectorForce.Force = Vector3.new(15555,0,0)
+        task.wait(0.)
+                WindUI:Notify({
+            Title = "DIAGEN 64",
+            Content = "[✅] 🍙🍙🍙🍙🍙🍙🍙🍙🍙🍙🍙🍙🍙🍙🍙🍙🍙🍙🍙🍙🍙🍙",
+            Icon = "rbxassetid://128620314150520",
+            Duration = 3,
+        })  
+                WindUI:Notify({
+            Title = "DIAGEN 64",
+            Content = "[✅] 🍙🍙🍙🍙🍙🍙🍙🍙🍙🍙🍙🍙🍙🍙🍙🍙🍙🍙🍙🍙🍙🍙",
+            Icon = "rbxassetid://128620314150520",
+            Duration = 3,
+        })  
+                WindUI:Notify({
+            Title = "DIAGEN 64",
+            Content = "[✅] 🍙🍙🍙🍙🍙🍙🍙🍙🍙🍙🍙🍙🍙🍙🍙🍙🍙🍙🍙🍙🍙🍙",
+            Icon = "rbxassetid://128620314150520",
+            Duration = 3,
+        })  
+                WindUI:Notify({
+            Title = "DIAGEN 64",
+            Content = "[✅] 🍙🍙🍙🍙🍙🍙🍙🍙🍙🍙🍙🍙🍙🍙🍙🍙🍙🍙🍙🍙🍙🍙",
+            Icon = "rbxassetid://128620314150520",
+            Duration = 3,
+        })  
+        humroot.VectorForce.Force = Vector3.new(0,15555,0)
+                humroot.VectorForce.Force = Vector3.new(15555,0,0)
+        task.wait(0.)
+        humroot.VectorForce.Force = Vector3.new(0,15555,0)
+                humroot.VectorForce.Force = Vector3.new(15555,0,0)
+        task.wait(0.)
+                WindUI:Notify({
+            Title = "DIAGEN 64",
+            Content = "[✅] 🍙🍙🍙🍙🍙🍙🍙🍙🍙🍙🍙🍙🍙🍙🍙🍙🍙🍙🍙🍙🍙🍙",
+            Icon = "rbxassetid://128620314150520",
+            Duration = 3,
+        })  
+                WindUI:Notify({
+            Title = "DIAGEN 64",
+            Content = "[✅] 🍙🍙🍙🍙🍙🍙🍙🍙🍙🍙🍙🍙🍙🍙🍙🍙🍙🍙🍙🍙🍙🍙",
+            Icon = "rbxassetid://128620314150520",
+            Duration = 3,
+        })  
+                WindUI:Notify({
+            Title = "DIAGEN 64",
+            Content = "[✅] 🍙🍙🍙🍙🍙🍙🍙🍙🍙🍙🍙🍙🍙🍙🍙🍙🍙🍙🍙🍙🍙🍙",
+            Icon = "rbxassetid://128620314150520",
+            Duration = 3,
+        })  
+                WindUI:Notify({
+            Title = "DIAGEN 64",
+            Content = "[✅] 🍙🍙🍙🍙🍙🍙🍙🍙🍙🍙🍙🍙🍙🍙🍙🍙🍙🍙🍙🍙🍙🍙",
+            Icon = "rbxassetid://128620314150520",
+            Duration = 3,
+        })  
+        humroot.VectorForce.Force = Vector3.new(0,15555,0)
+    end
+})
+
+local Button = Manip:Button({
+    Title = "Disable BFMA Effect",
+    Callback = function()
+      humroot.VectorForce.RelativeTo = "World"
+    end
+})
+
 Credits:Paragraph({
     Title = "thedarli/darli_17 (ValerikRob)",
     Desc = "CODER"
 })
 
-About:Paragraph({
+Credits:Paragraph({
     Title = "Footagesus",
     Desc = "UI Library for cheat"
 })
