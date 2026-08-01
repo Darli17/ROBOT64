@@ -42,6 +42,9 @@ local cursor = plrgui.Cursor
 cursorClone.Parent = coregui
 cursor.UI.ImageTransparency = 1
 
+cursorClone.DisplayOrder = 5555
+cursorClone.UI.Visible = true
+
 local Window = WindUI:CreateWindow({
     Title = "DIAGEN 64 [v1] [robot64]", -- window title
     Icon = "rbxassetid://128620314150520", -- lucide icon or "rbxassetid://" or URL. optional
@@ -65,31 +68,38 @@ local Window = WindUI:CreateWindow({
 
 -- //FUNCTIONS\\
 
+local function outfit(msg)
+    local visfolder = game.ReplicatedStorage.Assets.Vis
+
+    local outfit1 = visfolder[msg]
+    local outfitDEF = visfolder.Default
+
+    outfitDEF.Name = msg.."2"
+    outfit1.Name = "Default"
+    outfi1DEF.Name = msg
+end
+
 local function room(msg)
-    local humroot = workspace.char
-    
     local RS = game.ReplicatedStorage
     local rooms = RS.Assets.mapdebris
     local room = rooms[msg]:Clone()
 
-    humroot.Anchored = true
+    workspace.char.Anchored = true
     room.Parent = workspace
-    humroot.CFrame = room.TeleMap.CFrame
+    workspace.char.CFrame = room.TeleMap.CFrame
     task.wait(1)
-    humroot.Anchored = false
+    workspace.char.Anchored = false
     task.wait(2)
     room:Destroy()
 end
 local function telemap(msg)
-    local humroot = workspace.char
-
     for i,v in ipairs(workspace.hub:GetDescendants()) do
         if v:IsA("BasePart") and v.Name == "TeleMap" then
             if v.to.Value == msg then
-                humroot.Anchored = true
-                humroot.CFrame = v.CFrame
+                workspace.char.Anchored = true
+                workspace.char.CFrame = v.CFrame
                 task.wait(1)
-                humroot.Anchored = false
+                workspace.char.Anchored = false
             end
         end
     end
@@ -97,47 +107,12 @@ end
 
 -- //SCRIPT\\
 
-local humroot = workspace.char
-
 local FPSTag = Window:Tag({
     Title = "FPS: 0",
 })
 local PlayerTag = Window:Tag({
     Title = game.Players.LocalPlayer.Name,
     Color = Color3.fromRGB(255, 128, 0),
-})
- 
-local RunService = game:GetService("RunService")
-local lastUpdate = tick()
-local frameCount = 0
- 
-RunService.RenderStepped:Connect(function()
-    game.CoreGui.Cursor.UI.Position = game.Players.LocalPlayer.PlayerGui.Cursor.UI.Position
-
-    frameCount = frameCount + 1
-    local now = tick()
-    
-    if now - lastUpdate >= 1 then
-        local fps = math.floor(frameCount / (now - lastUpdate))
-        FPSTag:SetTitle("FPS: " .. fps)
-        
-        if fps >= 50 then
-            FPSTag:SetColor(Color3.fromRGB(0, 255, 0)) -- Green
-        elseif fps >= 30 then
-            FPSTag:SetColor(Color3.fromRGB(255, 200, 0)) -- Yellow
-        else
-            FPSTag:SetColor(Color3.fromRGB(255, 0, 0)) -- Red
-        end
-        
-        
-        frameCount = 0
-        lastUpdate = now
-    end
-end)
-
-local About = Window:Tab({
-    Title = "About",
-    Icon = "notebook-text", -- optional
 })
 
 local Player = Window:Tab({
@@ -155,15 +130,28 @@ local Maps = Window:Tab({
     Icon = "earth", -- optional
 })
 
-local Audio = Window:Tab({
-    Title = "Audio",
-    Icon = "audio-waveform", --optional
-})
-
-local Spawner = Window:Tab({
+local Spawner = Window:Section({
     Title = "Spawner",
     Icon = "apple", --optional
 })
+
+local Obj_Spawner = Spawner:Tab({
+    Title = "Object Spawner", 
+    Icon = "apple"
+})
+local Item_Spawner = Spawner:Tab({
+    Title = "Item Spawner", 
+    Icon = "apple"
+})
+local Mob_Spawner = Spawner:Tab({
+    Title = "Mobs Spawner",
+    Icon = "apple"
+})
+local Dial_Spawner = Spawner:Tab({
+    Title = "Dialogue Spawner", 
+    Icon = "apple"
+})
+
 
 local Preferences = Window:Tab({
     Title = "Preferences",
@@ -175,14 +163,19 @@ local Manip = Window:Tab({
     Icon = "anvil", -- optional
 })
 
-local Credits = Window:Tab({
-    Title = "Credits",
-    Icon = "newspaper", -- optional
+local Check = Window:Tab({
+    Title = "Checkpoints",
+    Icon = "coins", --optional
 })
 
-About:Paragraph({
-    Title = "Tips",
-    Desc = "If your mouse gets locked when you turn on the cheat, try pressing N to unlock it."
+local Outfits = Window:Tab({
+    Title = "Outfits",
+    Icon = "person-standing", --optional
+})
+
+local Scripts = Window:Tab({
+    Title = "Scripts",
+    Icon = "newspaper", --optional
 })
 
 Player:Section({
@@ -193,21 +186,21 @@ local Button = Player:Button({
     Title = "+X",
     Icon = "arrow-up",
     Callback = function()
-        humroot.CFrame = humroot.CFrame+Vector3.new(15, 0, 0)
+        workspace.char.CFrame = workspace.char.CFrame+Vector3.new(15, 0, 0)
     end
 })
 local Button = Player:Button({
     Title = "+Y",
     Icon = "arrow-up",
     Callback = function()
-        humroot.CFrame = humroot.CFrame+Vector3.new(0, 15, 0)
+        workspace.char.CFrame = workspace.char.CFrame+Vector3.new(0, 15, 0)
     end
 })
 local Button = Player:Button({
     Title = "+Z",
     Icon = "arrow-up",
     Callback = function()
-        humroot.CFrame = humroot.CFrame+Vector3.new(0, 0, 15)
+        workspace.char.CFrame = workspace.char.CFrame+Vector3.new(0, 0, 15)
     end
 })
 
@@ -219,21 +212,21 @@ local Button = Player:Button({
     Title = "-X",
     Icon = "arrow-up",
     Callback = function()
-        humroot.CFrame = humroot.CFrame+Vector3.new(-15, 0, 0)
+        workspace.char.CFrame = workspace.char.CFrame+Vector3.new(-15, 0, 0)
     end
 })
 local Button = Player:Button({
     Title = "-Y",
     Icon = "arrow-up",
     Callback = function()
-        humroot.CFrame = humroot.CFrame+Vector3.new(0, -15, 0)
+        workspace.char.CFrame = workspace.char.CFrame+Vector3.new(0, -15, 0)
     end
 })
 local Button = Player:Button({
     Title = "-Z",
     Icon = "arrow-up",
     Callback = function()
-        humroot.CFrame = humroot.CFrame+Vector3.new(0, 0, -15)
+        workspace.char.CFrame = workspace.char.CFrame+Vector3.new(0, 0, -15)
     end
 })
 
@@ -521,14 +514,36 @@ Saves:Section({
 })
 
 local Button = Saves:Button({
-    Title = "Collect all IceCreams on level ",
+    Title = "Collect IceCream On Level",
     Callback = function()
         for i,v in ipairs(workspace:GetDescendants()) do
             if v:IsA("MeshPart") and v.Name == "notcream" then
                 local TW = game:GetService("TweenService")
-                TW:Create(humroot, TweenInfo.new(0.3, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut), {
+                TW:Create(workspace.char, TweenInfo.new(0.3, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut), {
                     ["CFrame"] = v.CFrame
                 }):Play()
+            end
+        end
+    end
+})
+
+local Button = Saves:Button({
+    Title = "Collect Candy On Level",
+    Callback = function()
+        for i,v in ipairs(workspace:GetDescendants()) do
+            if v:IsA("BasePart") and v.Name == "candy" or v:IsA("MeshPart") and v.name == "hcandy" then
+                workspace.char.CFrame = v.CFrame
+            end
+        end
+    end
+})
+
+local Button = Saves:Button({
+    Title = "Collect Egg On Level [ONLY eggy MAP]",
+    Callback = function()
+        for i,v in ipairs(workspace:GetDescendants()) do
+            if v:IsA("MeshPart") and v.Name == "egg" then
+                workspace.char.CFrame = v.CFrame
             end
         end
     end
@@ -639,123 +654,142 @@ local Button = Maps:Button({
     end
 })
 
-Spawner:Section({
+
+-- //SPAWNER\\
+
+
+-- //OBJECT\\
+
+local block_size = Vector3.new(5, 5, 5)
+
+Obj_Spawner:Section({
+    Title = "Custom Block"
+})
+
+local Input = Obj_Spawner:Input({
+    Title = "Block Size",
+    Callback = function(text)
+        block_size = Vector3.new(text, text, text)
+    end
+})
+
+local Button = Obj_Spawner:Button({
+    Title = "Spawn Block",
+    Callback = function()
+        local it = game.ReplicatedStorage.Assets.maps.MAKE.place.P2:Clone()
+        it.Parent = workspace
+        it.Size = block_size
+        it.Name = "block"
+        it.CFrame = workspace.char.CFrame+Vector3.new(0, 5, 0)
+        it.Anchored = true
+        it.CanCollide = true
+    end
+})
+
+Obj_Spawner:Section({
     Title = "Objects"
 })
 
-local Button = Spawner:Button({
-    Title = "Snowball 1",
-    Callback = function()
-        local it = game.ReplicatedStorage.Assets.maps.hub.picks.snowman1:Clone()
-        it.Parent = workspace
-        it.CFrame = humroot.CFrame
-    end
-})
-local Button = Spawner:Button({
-    Title = "Snowball 2",
-    Callback = function()
-        local it = game.ReplicatedStorage.Assets.maps.hub.picks.snowman2:Clone()
-        it.Parent = workspace
-        it.CFrame = humroot.CFrame
-    end
-})
-local Button = Spawner:Button({
+local Button = Obj_Spawner:Button({
     Title = "Plate",
     Callback = function()
         local it = game.ReplicatedStorage.Assets.maps.MAKE.place.P2:Clone()
         it.Parent = workspace
-        it.CFrame = humroot.CFrame
+        it.CFrame = workspace.char.CFrame
     end
 })
-local Button = Spawner:Button({
+local Button = Obj_Spawner:Button({
+    Title = "Platform",
+    Callback = function()
+        local it = game.ReplicatedStorage.Assets.maps.turtle.moving.platform:Clone()
+        it.Parent = workspace
+        it.CFrame = workspace.char.CFrame
+        it.Anchored = true
+        it.CanCollide = triu
+    end
+})
+local Button = Obj_Spawner:Button({
+    Title = "Flying Island",
+    Callback = function()
+        local it = game.ReplicatedStorage.Assets.maps.hecklands.splatform:Clone()
+        it.Parent = workspace
+        it.CFrame = workspace.char.CFrame+Vector3.new(0,15,0)
+        it.Anchored = true
+        it.CanCollide = true
+    end
+})
+local Button = Obj_Spawner:Button({
+    Title = "House",
+    Callback = function()
+        local it = game.ReplicatedStorage.Assets.maps.turtle.house:Clone()
+        it.Parent = workspace
+        it.CFrame = workspace.char.CFrame+Vector3.new(0, 2, 0)
+        it.Anchored = true
+        it.CanCollide = true
+    end
+})
+local Button = Obj_Spawner:Button({
     Title = "Lava",
     Callback = function()
         local it = game.ReplicatedStorage.Assets.maps.obby2.lava:Clone()
         it.Parent = workspace
-        it.CFrame = humroot.CFrame
+        it.CFrame = workspace.char.CFrame
     end
 })
-
-Spawner:Section({
-    Title = "Items"
-})
-
-local Button = Spawner:Button({
-    Title = "Flamethrower",
+local Button = Obj_Spawner:Button({
+    Title = "Tree",
     Callback = function()
-        local it = game.ReplicatedStorage.Assets.maps.hub.flamethrower:Clone()
+        local it = game.ReplicatedStorage.Assets.maps.turtle.trees.tree:Clone()
         it.Parent = workspace
-        it.CFrame = humroot.CFrame
-    end
-})
-local Button = Spawner:Button({
-    Title = "Skateboard",
-    Callback = function()
-        local it = game.ReplicatedStorage.Assets.maps.hub.skateboard:Clone()
-        it.Parent = workspace
-        it.CFrame = humroot.CFrame
-    end
-})
-local Button = Spawner:Button({
-    Title = "Jetpack",
-    Callback = function()
-        local it = game.ReplicatedStorage.Assets.maps.hub.jetpack:Clone()
-        it.Parent = workspace
-        it.CFrame = humroot.CFrame
-    end
-})
-local Button = Spawner:Button({
-    Title = "Battery",
-    Callback = function()
-        local it = game.ReplicatedStorage.Assets.battery:Clone()
-        it.Parent = workspace
-        it.CFrame = humroot.CFrame
-        it.Anchored = false
+        it.CFrame = workspace.char.CFrame+Vector3.new(0, 4, 0)
+        it.Anchored = true
         it.CanCollide = true
     end
 })
-local Button = Spawner:Button({
+local Button = Obj_Spawner:Button({
+    Title = "Rock",
+    Callback = function()
+        local it = game.ReplicatedStorage.Assets.maps.turtle.rock:Clone()
+        it.Parent = workspace
+        it.CFrame = workspace.char.CFrame+Vector3.new(5, 0.5, 0)
+        it.Anchored = true
+        it.CanCollide = true
+    end
+})
+local Button = Obj_Spawner:Button({
     Title = "Egg",
     Callback = function()
         local it = game.ReplicatedStorage.Assets.egg:Clone()
         it.Parent = workspace
-        it.CFrame = humroot.CFrame
+        it.CFrame = workspace.char.CFrame
         it.Anchored = false
         it.CanCollide = true
     end
 })
-local Button = Spawner:Button({
-    Title = "IceCream",
-    Callback = function()
-        local it = game.ReplicatedStorage.Assets.notcream:Clone()
-        it.Parent = workspace
-        it.CFrame = humroot.CFrame+Vector3.new(5, 0, 0)
-    end
+
+Obj_Spawner:Section({
+    Title = "Custom Portals"
 })
 
-Spawner:Section({
-    Title = "Custom Portal"
-})
-
-Spawner:Paragraph({
+Obj_Spawner:Paragraph({
     Title = "Tip",
     Desc = "First, enter the name of the map in the map field, then create the portal."
 })
-Spawner:Paragraph({
+Obj_Spawner:Paragraph({
     Title = "Fact",
     Desc = "I'm too lazy to write out each map name for you, use DEX Explorer for this, go to this path: game.ReplicatedStorage.Assets.maps and view map names",
 })
 
 local portalvalue = nil
 
-local Input = Spawner:Input({
+local Input = Obj_Spawner:Input({
     Title = "Portal Map",
     Callback = function(text)
         portalvalue = text
     end
 })
  
-local Button = Spawner:Button({
+local Button = Obj_Spawner:Button({
     Title = "Portal Spawn",
     Callback = function(value)
         local custportal = game.ReplicatedStorage.Assets.TeleMap:Clone()
@@ -768,10 +802,231 @@ local Button = Spawner:Button({
         mesh:Clone().Parent = custportal
         custportal.Color = Color3.fromRGB(80, 48, 127)
         custportal.Transparency = 0
-        custportal.CFrame = humroot.CFrame+Vector3.new(5, 0, 0)
+        custportal.CFrame = workspace.char.CFrame+Vector3.new(5, 0, 0)
     end
 })
 
+
+-- //ITEMS\\
+
+Item_Spawner:Section({
+    Title = "Items",
+})
+
+local Button = Item_Spawner:Button({
+    Title = "Snowball 1",
+    Callback = function()
+        local it = game.ReplicatedStorage.Assets.maps.hub.picks.snowman1:Clone()
+        it.Parent = workspace
+        it.CFrame = workspace.char.CFrame
+    end
+})
+local Button = Item_Spawner:Button({
+    Title = "Snowball 2",
+    Callback = function()
+        local it = game.ReplicatedStorage.Assets.maps.hub.picks.snowman2:Clone()
+        it.Parent = workspace
+        it.CFrame = workspace.char.CFrame
+    end
+})
+local Button = Item_Spawner:Button({
+    Title = "Flamethrower",
+    Callback = function()
+        local it = game.ReplicatedStorage.Assets.maps.hub.flamethrower:Clone()
+        it.Parent = workspace
+        it.CFrame = workspace.char.CFrame
+    end
+})
+local Button = Item_Spawner:Button({
+    Title = "Skateboard",
+    Callback = function()
+        local it = game.ReplicatedStorage.Assets.maps.hub.skateboard:Clone()
+        it.Parent = workspace
+        it.CFrame = workspace.char.CFrame
+    end
+})
+local Button = Item_Spawner:Button({
+    Title = "Jetpack",
+    Callback = function()
+        local it = game.ReplicatedStorage.Assets.maps.hub.jetpack:Clone()
+        it.Parent = workspace
+        it.CFrame = workspace.char.CFrame
+    end
+})
+local Button = Item_Spawner:Button({
+    Title = "Battery",
+    Callback = function()
+        local it = game.ReplicatedStorage.Assets.battery:Clone()
+        it.Parent = workspace
+        it.CFrame = workspace.char.CFrame
+        it.Anchored = false
+        it.CanCollide = true
+    end
+})
+
+local Button = Item_Spawner:Button({
+    Title = "IceCream",
+    Callback = function()
+        local it = game.ReplicatedStorage.Assets.notcream:Clone()
+        it.Parent = workspace
+        it.CFrame = workspace.char.CFrame+Vector3.new(5, 0, 0)
+    end
+})
+local Button = Item_Spawner:Button({
+    Title = "Old IceCream",
+    Callback = function()
+        local it = game.ReplicatedStorage.Assets.maps.testmap.picks.MeshPart:Clone()
+        it.Parent = workspace
+        it.CFrame = workspace.char.CFrame
+        it.CanCollide = true
+        it.Anchored = false
+    end
+})
+local Button = Item_Spawner:Button({
+    Title = "Cube",
+    Callback = function()
+        local it = game.ReplicatedStorage.Assets.maps.testmap.picks.Part:Clone()
+        it.Parent = workspace
+        it.CFrame = workspace.char.CFrame
+        it.CanCollide = true
+        it.Anchored = false
+    end
+})
+local Button = Item_Spawner:Button({
+    Title = "Jar",
+    Callback = function()
+        local it = game.ReplicatedStorage.Assets.maps.turtle.picks.bottle:Clone()
+        it.Parent = workspace
+        it.CFrame = workspace.char.CFrame
+        it.CanCollide = true
+        it.Anchored = false
+    end
+})
+local Button = Item_Spawner:Button({
+    Title = "Pot",
+    Callback = function()
+        local it = game.ReplicatedStorage.Assets.maps.knoddy2.picks.pot:Clone()
+        it.Parent = workspace
+        it.CFrame = workspace.char.CFrame
+        it.CanCollide = true
+        it.Anchored = false
+    end
+})
+local Button = Item_Spawner:Button({
+    Title = "Plant",
+    Callback = function()
+        local it = game.ReplicatedStorage.Assets.maps.knoddy2.picks.planty:Clone()
+        it.Parent = workspace
+        it.CFrame = workspace.char.CFrame
+        it.CanCollide = true
+        it.Anchored = false
+    end
+})
+local Button = Item_Spawner:Button({
+    Title = "Brento",
+    Callback = function()
+        local it = game.ReplicatedStorage.Assets.maps.candy.picks.brento:Clone()
+        it.Parent = workspace
+        it.CFrame = workspace.char.CFrame
+        it.CanCollide = true
+        it.Anchored = false
+    end
+})
+local Button = Item_Spawner:Button({
+    Title = "Crayon",
+    Callback = function()
+        local it = game.ReplicatedStorage.Assets.maps.tiny.picks.crayon:Clone()
+        it.Parent = workspace
+        it.CFrame = workspace.char.CFrame
+        it.CanCollide = true
+        it.Anchored = false
+    end
+})
+local Button = Item_Spawner:Button({
+    Title = "Dice",
+    Callback = function()
+        local it = game.ReplicatedStorage.Assets.maps.tiny.picks.dice:Clone()
+        it.Parent = workspace
+        it.CFrame = workspace.char.CFrame
+        it.CanCollide = true
+        it.Anchored = false
+    end
+})
+local Button = Item_Spawner:Button({
+    Title = "Wire",
+    Callback = function()
+        local it = game.ReplicatedStorage.Assets.maps.tiny.picks.plug:Clone()
+        it.Parent = workspace
+        it.CFrame = workspace.char.CFrame
+        it.CanCollide = true
+        it.Anchored = false
+    end
+})
+
+local Button = Mob_Spawner:Button({
+    Title = "Guard",
+    Callback = function()
+        local it = game.ReplicatedStorage.Assets.enemies.guard:Clone()
+        it.Parent = workspace
+        it:PivotTo(workspace.char.CFrame+Vector3.new(5,3,0))
+    end
+})
+local Button = Mob_Spawner:Button({
+    Title = "Manwog",
+    Callback = function()
+        local it = game.ReplicatedStorage.Assets.enemies.manwog:Clone()
+        it.Parent = workspace
+        it:PivotTo(workspace.char.CFrame+Vector3.new(5,1,0))
+    end
+})
+local Button = Mob_Spawner:Button({
+    Title = "Fish",
+    Callback = function()
+        local it = game.ReplicatedStorage.Assets.enemies.fish:Clone()
+        it.Parent = workspace
+        it:PivotTo(workspace.char.CFrame+Vector3.new(5,3,0))
+    end
+})
+local Button = Mob_Spawner:Button({
+    Title = "Snoder",
+    Callback = function()
+        local it = game.ReplicatedStorage.Assets.enemies.snoder:Clone()
+        it.Parent = workspace
+        it:PivotTo(workspace.char.CFrame+Vector3.new(5,5,0))
+    end
+})
+local Button = Mob_Spawner:Button({
+    Title = "Ufo",
+    Callback = function()
+        local it = game.ReplicatedStorage.Assets.enemies.ufo:Clone()
+        it.Parent = workspace
+        it:PivotTo(workspace.char.CFrame+Vector3.new(5,5,0))
+    end
+})
+local Button = Mob_Spawner:Button({
+    Title = "Crab",
+    Callback = function()
+        local it = game.ReplicatedStorage.Assets.enemies.crab:Clone()
+        it.Parent = workspace
+        it:PivotTo(workspace.char.CFrame+Vector3.new(5,4,0))
+    end
+})
+local Button = Mob_Spawner:Button({
+    Title = "Bee",
+    Callback = function()
+        local it = game.ReplicatedStorage.Assets.enemies.bee:Clone()
+        it.Parent = workspace
+        it:PivotTo(workspace.char.CFrame+Vector3.new(5,3,0))
+    end
+})
+local Button = Mob_Spawner:Button({
+    Title = "Boss Bee",
+    Callback = function()
+        local it = game.ReplicatedStorage.Assets.enemies.bossbee:Clone()
+        it.Parent = workspace
+        it:PivotTo(workspace.char.CFrame+Vector3.new(5,3,0))
+    end
+})
 
 local ss = game.SoundService
 
@@ -800,6 +1055,8 @@ local Slider = Preferences:Slider({
     end
 })
 
+
+
 local Slider = Preferences:Slider({
     Title = "Sounds",
     Value = {
@@ -814,39 +1071,13 @@ local Slider = Preferences:Slider({
 })
 
 Preferences:Section({
-    Title = "Player Manipulations"
-})
-
-local Slider = Preferences:Slider({
-    Title = "HumRoot Transparency",
-    Value = {
-        Min = 0,
-        Max = 1,
-        Default = 1
-    },
-    Step = 0.1,
-    Callback = function(value)
-        workspace.char.Transparency = value
-    end
-})
-local Colorpicker = Preferences:Colorpicker({
-    Title = "HumRoot Color",
-    Default = Color3.fromRGB(255, 0, 0), -- default color. optional
-    Locked = false, -- disable colorpicker. optional
-    Flag = "custom_color", -- for config saving. optional
-    Callback = function(color)
-        workspace.char.Color = color
-    end
-})
-
-Preferences:Section({
     Title = "Other"
 })
 
 local Button = Preferences:Button({
     Title = "Rejoin ROBOT64",
     Callback = function()
-                            local Popup = WindUI:Popup({
+                    local Popup = WindUI:Popup({
                         Title = "DIAGEN 64",
                         Icon = "rbxassetid://128620314150520", -- lucide icon or "rbxassetid://". optional
                         Content = "You really want rejoin???",
@@ -906,10 +1137,15 @@ local Button = Preferences:Button({
     end
 })
 
+Manip:Section({
+    Title = "Player Manipulations"
+})
+
+
 local Button = Manip:Button({
     Title = "Start BFMA [BIG FORCE MIDDLE ABUSING]",
     Callback = function()
-        humroot.VectorForce.RelativeTo = "Attachment0"
+        workspace.char.VectorForce.RelativeTo = "Attachment0"
         WindUI:Notify({
             Title = "DIAGEN 64",
             Content = "[✅] Operation started!",
@@ -940,40 +1176,10 @@ local Button = Manip:Button({
             Icon = "rbxassetid://128620314150520",
             Duration = 3,
         })  
-        humroot.VectorForce.Force = Vector3.new(15555,0,0)
+        workspace.char.VectorForce.Force = Vector3.new(15555,0,0)
         task.wait(0.)
-        humroot.VectorForce.Force = Vector3.new(0,15555,0)
-                humroot.VectorForce.Force = Vector3.new(15555,0,0)
-        task.wait(0.)
-                WindUI:Notify({
-            Title = "DIAGEN 64",
-            Content = "[✅] 🍙🍙🍙🍙🍙🍙🍙🍙🍙🍙🍙🍙🍙🍙🍙🍙🍙🍙🍙🍙🍙🍙",
-            Icon = "rbxassetid://128620314150520",
-            Duration = 3,
-        })  
-                WindUI:Notify({
-            Title = "DIAGEN 64",
-            Content = "[✅] 🍙🍙🍙🍙🍙🍙🍙🍙🍙🍙🍙🍙🍙🍙🍙🍙🍙🍙🍙🍙🍙🍙",
-            Icon = "rbxassetid://128620314150520",
-            Duration = 3,
-        })  
-                WindUI:Notify({
-            Title = "DIAGEN 64",
-            Content = "[✅] 🍙🍙🍙🍙🍙🍙🍙🍙🍙🍙🍙🍙🍙🍙🍙🍙🍙🍙🍙🍙🍙🍙",
-            Icon = "rbxassetid://128620314150520",
-            Duration = 3,
-        })  
-                WindUI:Notify({
-            Title = "DIAGEN 64",
-            Content = "[✅] 🍙🍙🍙🍙🍙🍙🍙🍙🍙🍙🍙🍙🍙🍙🍙🍙🍙🍙🍙🍙🍙🍙",
-            Icon = "rbxassetid://128620314150520",
-            Duration = 3,
-        })  
-        humroot.VectorForce.Force = Vector3.new(0,15555,0)
-                humroot.VectorForce.Force = Vector3.new(15555,0,0)
-        task.wait(0.)
-        humroot.VectorForce.Force = Vector3.new(0,15555,0)
-                humroot.VectorForce.Force = Vector3.new(15555,0,0)
+        workspace.char.VectorForce.Force = Vector3.new(0,15555,0)
+                workspace.char.VectorForce.Force = Vector3.new(15555,0,0)
         task.wait(0.)
                 WindUI:Notify({
             Title = "DIAGEN 64",
@@ -999,23 +1205,370 @@ local Button = Manip:Button({
             Icon = "rbxassetid://128620314150520",
             Duration = 3,
         })  
-        humroot.VectorForce.Force = Vector3.new(0,15555,0)
+        workspace.char.VectorForce.Force = Vector3.new(0,15555,0)
+                workspace.char.VectorForce.Force = Vector3.new(15555,0,0)
+        task.wait(0.)
+        workspace.char.VectorForce.Force = Vector3.new(0,15555,0)
+                workspace.char.VectorForce.Force = Vector3.new(15555,0,0)
+        task.wait(0.)
+                WindUI:Notify({
+            Title = "DIAGEN 64",
+            Content = "[✅] 🍙🍙🍙🍙🍙🍙🍙🍙🍙🍙🍙🍙🍙🍙🍙🍙🍙🍙🍙🍙🍙🍙",
+            Icon = "rbxassetid://128620314150520",
+            Duration = 3,
+        })  
+                WindUI:Notify({
+            Title = "DIAGEN 64",
+            Content = "[✅] 🍙🍙🍙🍙🍙🍙🍙🍙🍙🍙🍙🍙🍙🍙🍙🍙🍙🍙🍙🍙🍙🍙",
+            Icon = "rbxassetid://128620314150520",
+            Duration = 3,
+        })  
+                WindUI:Notify({
+            Title = "DIAGEN 64",
+            Content = "[✅] 🍙🍙🍙🍙🍙🍙🍙🍙🍙🍙🍙🍙🍙🍙🍙🍙🍙🍙🍙🍙🍙🍙",
+            Icon = "rbxassetid://128620314150520",
+            Duration = 3,
+        })  
+                WindUI:Notify({
+            Title = "DIAGEN 64",
+            Content = "[✅] 🍙🍙🍙🍙🍙🍙🍙🍙🍙🍙🍙🍙🍙🍙🍙🍙🍙🍙🍙🍙🍙🍙",
+            Icon = "rbxassetid://128620314150520",
+            Duration = 3,
+        })  
+        workspace.char.VectorForce.Force = Vector3.new(0,15555,0)
     end
 })
 
 local Button = Manip:Button({
     Title = "Disable BFMA Effect",
     Callback = function()
-      humroot.VectorForce.RelativeTo = "World"
+      workspace.char.VectorForce.RelativeTo = "World"
     end
 })
 
-Credits:Paragraph({
-    Title = "thedarli/darli_17 (ValerikRob)",
-    Desc = "CODER"
+local Toggle = Manip:Toggle({
+    Title = "Character Debug Mode [INDEV]",
+    Value = false,
+    Callback = function(state)
+        if state == true then
+            print("deb")
+            if workspace:FindFirstChild("vis") and workspace.vis:FindFirstChild("trs") then
+                local vis = workspace.vis
+                for i5, v5 in pairs(workspace.vis:GetChildren()) do
+                    if v5.ClassName == "MeshPart" then
+                        v5.Transparency = 1
+                        vis.head.Beam.Enabled = false
+                        vis.head.face.Transparency = 1
+                        if vis.trs:FindFirstChild("hat") then
+                            vis.trs.hat.Transparency = 1
+                        end
+
+                        if vis.trs:FindFirstChild("pack") then
+                            vis.trs.pack.CFrame += Vector3.new(6000,6000,6000) 
+                            vis.trs.bt1.CFrame += Vector3.new(6000,6000,6000) 
+                            vis.trs.bt2.CFrame += Vector3.new(6000,6000,6000) 
+                            vis.trs.bt3.CFrame += Vector3.new(6000,6000,6000) 
+                            vis.trs.bt4.CFrame += Vector3.new(6000,6000,6000) 
+                        end
+
+                    end
+                end
+            end
+            local debug = Instance.new("ConeHandleAdornment")
+            debug.Parent = workspace.char
+            debug.CFrame = Vector3.new(0, 0, -5)
+
+            workspace.char.Shape = "Block"
+            workspace.char.Transparency = 0.5
+            workspace.char.Center.Visible = true
+        end
+        if state == false then
+            if workspace:FindFirstChild("vis") and workspace.vis:FindFirstChild("trs") then
+                local vis = workspace.vis
+                for i6, v6 in pairs(workspace.vis:GetChildren()) do
+                    if v6.ClassName == "MeshPart" then
+                        v6.Transparency = 0
+                        vis.head.Beam.Enabled = false
+                        vis.head.face.Transparency = 0
+                        if vis.trs:FindFirstChild("hat") then
+                            vis.trs.hat.Transparency = 0
+                        end
+
+                        if vis.trs:FindFirstChild("pack") then
+                            vis.trs.pack.CFrame -= Vector3.new(6000,6000,6000) 
+                            vis.trs.bt1.CFrame -= Vector3.new(6000,6000,6000) 
+                            vis.trs.bt2.CFrame -= Vector3.new(6000,6000,6000) 
+                            vis.trs.bt3.CFrame -= Vector3.new(6000,6000,6000) 
+                            vis.trs.bt4.CFrame -= Vector3.new(6000,6000,6000) 
+                        end
+
+                    end
+                end
+            end
+            workspace.char.ConeHandleAdornment:Destroy()
+
+            workspace.char.Shape = "Block"
+            workspace.char.Transparency = 1
+            workspace.char.Center.Visible = false
+        end
+    end
 })
 
-Credits:Paragraph({
-    Title = "Footagesus",
-    Desc = "UI Library for cheat"
+local Input = Manip:Input({
+    Title = "Custom Text Under Head",
+    Callback = function(text)
+            workspace.vis.head.BillboardGui.Enabled = true
+            workspace.vis.head.BillboardGui.AlwaysOnTop = true
+            workspace.vis.head.BillboardGui.user.Visible = false
+            workspace.vis.head.BillboardGui.display.Text = text
+
+    end
 })
+local Button = Manip:Button({
+    Title = "Disable Custom Text Under Head",
+    Callback = function()
+            workspace.vis.head.BillboardGui.Enabled = false
+    end
+})
+
+local checkpointState = 1
+local checkpointCreated = nil
+local checkpointNumber = nil
+local checkpointDeleteNumber = nil
+
+local checkpointColor = Color3.fromRGB(255, 255, 0)
+
+local checkpointNotifications = false
+
+Check:Paragraph({
+    Title = "Checkpoints",
+    Desc = "Checkpoint Number for first spawned checkpoint is 1, every new spawned checkpoint: +1 number."
+})
+
+local Button = Check:Button({
+    Title = "Create Checkpoint",
+    Callback = function()
+    
+        if checkpointNotifications == true then
+            WindUI:Notify({
+                Title = "Checkpoint",
+                Icon = "rbxassetid://128620314150520",
+                Content = "Created checkpoint under the number "..checkpointState,
+                Duration = 3
+            })
+        end
+        local checkpoint = Instance.new("Part")
+        checkpoint.Parent = workspace
+        checkpoint.Size = Vector3.new(5, 5, 5)
+        checkpoint.Color = checkpointColor
+        checkpoint.Name = "Checkpoint".. checkpointState
+        checkpoint.CanCollide = false
+        checkpoint.Anchored = true
+        local attach = game.ReplicatedStorage.Assets.maps.slide.TeleMap.Attachment
+        local mesh = game.ReplicatedStorage.Assets.maps.slide.TeleMap.Mesh
+        attach:Clone().Parent = checkpoint
+        mesh:Clone().Parent = checkpoint
+        checkpoint.CFrame = workspace.char.CFrame+Vector3.new(0, 0.5, 0)
+
+        checkpointState += 1
+    end
+})
+
+local Input = Check:Input({
+    Title = "Checkpoint Number",
+    Callback = function(text)
+        checkpointNumber = text
+    end
+})
+
+local Button = Check:Button({
+    Title = "Teleport to Checkpoint",
+    Callback = function()
+        print("Checkpoint".. checkpointNumber)
+        workspace.char.CFrame = workspace["Checkpoint".. checkpointNumber].CFrame
+        if checkpointNotifications == true then
+            WindUI:Notify({
+                Title = "Checkpoint",
+                Icon = "rbxassetid://128620314150520",
+                Content = "Teleported to checkpoint under the number "..checkpointNumber,
+                Duration = 3
+            })
+        end
+    end
+})
+
+Check:Section({
+    Title = "Delete Checkpoints"
+})
+
+local Input = Check:Input({
+    Title = "Checkpoint Number",
+    Callback = function(text)
+        checkpointDeleteNumber = text
+    end
+})
+
+local Button = Check:Button({
+    Title = "Delete Checkpoint",
+    Callback = function()
+       workspace["Checkpoint".. checkpointDeleteNumber]:Destroy()
+        if checkpointNotifications == true then
+            WindUI:Notify({
+                Title = "Checkpoint",
+                Icon = "rbxassetid://128620314150520",
+                Content = "Deleted checkpoint under the number "..checkpointDeleteNumber,
+                Duration = 3
+            })
+        end
+    end
+})
+
+Check:Section({
+    Title = "Checkpoint Configuration"
+})
+
+local Button = Check:Button({
+    Title = "Reset checkpointState",
+    Desc = "Explanation: if you delete 5 checkpoint and you create new, his number will be 6, if you click this button, checkpointState reset, and new checkpoint will be not 6, but 1.",
+    Callback = function()
+       checkpointState = 1
+       if checkpointNotifications == true then
+            WindUI:Notify({
+                Title = "Checkpoint",
+                Icon = "rbxassetid://128620314150520",
+                Content = "Reseted checkpointState",
+                Duration = 3
+            })
+        end
+    end
+})
+
+
+local Colorpicker = Check:Colorpicker({
+    Title = "Checkpoint Color",
+    Default = Color3.fromRGB(255, 255, 0), -- default color. optional
+    Locked = false, -- disable colorpicker. optional
+    Flag = "custom_color", -- for config saving. optional
+    Callback = function(color)
+        checkpointColor = color
+        if checkpointNotifications == true then
+            WindUI:Notify({
+                Title = "Checkpoint",
+                Icon = "rbxassetid://128620314150520",
+                Content = "Changed checkpoint color to "..checkpointColor,
+                Duration = 3
+            })
+        end
+    end
+})
+local Toggle = Check:Toggle({
+    Title = "Enable Checkpoints Configuration",
+    Value = false,
+    Callback = function(state)
+        checkpointNotifications = state  
+    end
+})
+
+Outfits:Section({
+    Title = "Scripts Outfits",
+})
+
+local Button = Outfits:Button({
+    Title = "Imposter Vis",
+    Callback = function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/rekitrelt/R64-scripts/refs/heads/main/Custom%20Avatars/imposter.lua"))()
+    end
+})
+local Button = Outfits:Button({
+    Title = "Knoddy Vis",
+    Callback = function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/rekitrelt/R64-scripts/refs/heads/main/Custom%20Avatars/knoddy.lua"))()
+    end
+})
+local Button = Outfits:Button({
+    Title = "Roblox Skin Vis ",
+    Callback = function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/rekitrelt/R64-scripts/refs/heads/main/Custom%20Avatars/roblox.lua"))()
+    end
+})
+local Button = Outfits:Button({
+    Title = "Wario",
+    Callback = function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/rekitrelt/R64-scripts/refs/heads/main/Custom%20Avatars/wario.lua"))()
+    end
+})
+
+Outfits:Section({
+    Title = "Game Files Outfits"
+})
+Outfits:Paragraph({
+    Title = "WARNING!",
+    Desc = "To use this Outfits you need quit to title. +This is very bugy theme, whatever, after applying outfit you need TO REJOIN game. to use another outfit from this category"
+})
+
+local Button = Outfits:Button({
+    Title = "High Quality",
+    Callback = function()
+        outfit("High Quality")
+    end
+})
+local Button = Outfits:Button({
+    Title = "Ice Cream",
+    Callback = function()
+        outfit("Icecream")
+    end
+})
+local Button = Outfits:Button({
+    Title = "Photo Copy",
+    Callback = function()
+        outfit("Photocopy")
+    end
+})
+local Button = Outfits:Button({
+    Title = "Render96",
+    Callback = function()
+        outfit("Render96")
+    end
+})
+local Button = Outfits:Button({
+    Title = "Retro",
+    Callback = function()
+        outfit("Retro")
+    end
+})
+
+local Button = Scripts:Button({
+    Title = "DEX Explorer REContinued",
+    Callback = function()
+        loadstring(game:HttpGet("https://rawscripts.net/raw/Universal-Script-DEX-REContinued-240081"))()
+    end
+})
+ 
+local RunService = game:GetService("RunService")
+local lastUpdate = tick()
+local frameCount = 0
+ 
+RunService.RenderStepped:Connect(function()
+    
+    game.CoreGui.Cursor.UI.Position = game.Players.LocalPlayer.PlayerGui.Cursor.UI.Position
+    
+    frameCount = frameCount + 1
+    local now = tick()
+    
+    if now - lastUpdate >= 1 then
+        local fps = math.floor(frameCount / (now - lastUpdate))
+        FPSTag:SetTitle("FPS: " .. fps)
+        
+        if fps >= 50 then
+            FPSTag:SetColor(Color3.fromRGB(0, 255, 0)) -- Green
+        elseif fps >= 30 then
+            FPSTag:SetColor(Color3.fromRGB(255, 200, 0)) -- Yellow
+        else
+            FPSTag:SetColor(Color3.fromRGB(255, 0, 0)) -- Red
+        end
+        
+        
+        frameCount = 0
+        lastUpdate = now
+    end
+end)
