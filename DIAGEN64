@@ -550,7 +550,7 @@ local Button = Saves:Button({
 })
 
 Maps:Section({
-    Title = "Hub Rooms"
+    Title = "Hub Maps"
 })
 
 local Button = Maps:Button({
@@ -598,7 +598,7 @@ local Button = Maps:Button({
 })
 
 Maps:Section({
-    Title = "Street Rooms"
+    Title = "Street Maps"
 })
 
 local Button = Maps:Button({
@@ -627,7 +627,7 @@ local Button = Maps:Button({
 })
 
 Maps:Section({
-    Title = "Secrets Rooms"
+    Title = "Secrets Maps"
 })
 
 local Button = Maps:Button({
@@ -638,7 +638,7 @@ local Button = Maps:Button({
 })
 
 Maps:Section({
-    Title = "Bonus Rooms"
+    Title = "Bonus Maps"
 })
 
 local Button = Maps:Button({
@@ -654,6 +654,51 @@ local Button = Maps:Button({
     end
 })
 
+Maps:Section({
+    Title = "Custom Maps"
+})
+
+local Button = Maps:Button({
+    Title = "Bob-omb Battlefield",
+    Callback = function()
+        game:GetObjects("rbxassetid://8255610770")[1].Parent = game.ReplicatedStorage.Assets.maps
+        SpawnPos = Vector3.new(0, 0, 0)
+
+        local custportal = game.ReplicatedStorage.Assets.TeleMap:Clone()
+        custportal.Parent = workspace
+        print(portalvalue)
+        custportal.to.Value = "custom"
+        custportal.where.Value = SpawnPos
+        local attach = game.ReplicatedStorage.Assets.maps.slide.TeleMap.Attachment
+        local mesh = game.ReplicatedStorage.Assets.maps.slide.TeleMap.Mesh
+        attach:Clone().Parent = custportal
+        mesh:Clone().Parent = custportal
+        custportal.Color = Color3.fromRGB(80, 48, 127)
+        custportal.Transparency = 0
+        custportal.CFrame = workspace.char.CFrame+Vector3.new(5, 0, 0)
+    end
+})
+
+local Button = Maps:Button({
+    Title = "Custom Hub",
+    Callback = function()
+        game:GetObjects("rbxassetid://133270707176687")[1].Parent = game.ReplicatedStorage.Assets.maps
+        SpawnPos = Vector3.new(-34.336, 96.371, -72.412)
+
+        local custportal = game.ReplicatedStorage.Assets.TeleMap:Clone()
+        custportal.Parent = workspace
+        print(portalvalue)
+        custportal.to.Value = "customhub"
+        custportal.where.Value = SpawnPos
+        local attach = game.ReplicatedStorage.Assets.maps.slide.TeleMap.Attachment
+        local mesh = game.ReplicatedStorage.Assets.maps.slide.TeleMap.Mesh
+        attach:Clone().Parent = custportal
+        mesh:Clone().Parent = custportal
+        custportal.Color = Color3.fromRGB(80, 48, 127)
+        custportal.Transparency = 0
+        custportal.CFrame = workspace.char.CFrame+Vector3.new(5, 0, 0)
+    end
+})
 
 -- //SPAWNER\\
 
@@ -1025,6 +1070,39 @@ local Button = Mob_Spawner:Button({
         local it = game.ReplicatedStorage.Assets.enemies.bossbee:Clone()
         it.Parent = workspace
         it:PivotTo(workspace.char.CFrame+Vector3.new(5,3,0))
+    end
+})
+
+Dial_Spawner:Paragraph({
+    Title = "WARNING",
+    Desc = "All progress in unfinished!"
+})
+
+local dialogue_model = nil
+local dialogue_state = 0
+
+local Dropdown = Dial_Spawner:Dropdown({
+    Title = "Select Model",
+    Values = {
+        "Dr. Smar"
+    },
+    Callback = function(selected)
+        if Selected == "Dr. Smar" then
+            dialogue_model = selected
+
+            local smar = game.ReplicatedStorage.Assets.maps.eggy["Dr. Smar"]:Clone()
+            smar.Parent = workspace
+            smar.PivotTo(workspace.char.CFrame+Vector3.new(4,1.5,0))
+        end
+    end
+})
+
+local Button = Dial_Spawner:Button({
+    Title = "Create",
+    Callback = function()
+        if dialogue_model == "Dr. Smar" then
+
+        end
     end
 })
 
