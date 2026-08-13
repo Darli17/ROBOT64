@@ -46,7 +46,7 @@ cursorClone.DisplayOrder = 5555
 cursorClone.UI.Visible = true
 
 local Window = WindUI:CreateWindow({
-    Title = "DIAGEN 64 [v1] [robot64]", -- window title
+    Title = "DIAGEN 64 [v1] [release]", -- window title
     Icon = "rbxassetid://128620314150520", -- lucide icon or "rbxassetid://" or URL. optional
     Folder = "diagen64",
     Theme = "Amber",
@@ -147,11 +147,6 @@ local Mob_Spawner = Spawner:Tab({
     Title = "Mobs Spawner",
     Icon = "apple"
 })
-local Dial_Spawner = Spawner:Tab({
-    Title = "Dialogue Spawner", 
-    Icon = "apple"
-})
-
 
 local Preferences = Window:Tab({
     Title = "Preferences",
@@ -159,8 +154,8 @@ local Preferences = Window:Tab({
 })
 
 local Manip = Window:Tab({
-    Title = "Manipulations",
-    Icon = "anvil", -- optional
+    Title = "Fun",
+    Icon = "smile", -- optional
 })
 
 local Check = Window:Tab({
@@ -539,7 +534,7 @@ local Button = Saves:Button({
 })
 
 local Button = Saves:Button({
-    Title = "Collect Egg On Level [ONLY eggy MAP]",
+    Title = "Collect Egg On Level",
     Callback = function()
         for i,v in ipairs(workspace:GetDescendants()) do
             if v:IsA("MeshPart") and v.Name == "egg" then
@@ -689,6 +684,49 @@ local Button = Maps:Button({
         custportal.Parent = workspace
         print(portalvalue)
         custportal.to.Value = "customhub"
+        custportal.where.Value = SpawnPos
+        local attach = game.ReplicatedStorage.Assets.maps.slide.TeleMap.Attachment
+        local mesh = game.ReplicatedStorage.Assets.maps.slide.TeleMap.Mesh
+        attach:Clone().Parent = custportal
+        mesh:Clone().Parent = custportal
+        custportal.Color = Color3.fromRGB(80, 48, 127)
+        custportal.Transparency = 0
+        custportal.CFrame = workspace.char.CFrame+Vector3.new(5, 0, 0)
+    end
+})
+
+Maps:Section({
+    Title = "Make Maps"
+})
+
+local map_value = nil
+local map_position = Vector3.new(0, -8, 8)
+
+local Input = Maps:Input({
+    Title = "Map Model ID",
+    Desc = "rbxassetid://yourid",
+    Callback = function(text)
+        map_value = text
+    end
+})
+local Input = Maps:Input({
+    Title = "Spawn Position",
+    Callback = function(text)
+        map_position = Vector3.new(text)
+    end
+})
+
+local Button = Maps:Button({
+    Title = "Spawn Map",
+    Callback = function()
+        local mapsq = game:GetObjects(map_value)[1]
+        mapsq.Parent = game.ReplicatedStorage.Assets.maps
+        SpawnPos = map_position
+
+        local custportal = game.ReplicatedStorage.Assets.TeleMap:Clone()
+        custportal.Parent = workspace
+        print(portalvalue)
+        custportal.to.Value = mapsq.Name
         custportal.where.Value = SpawnPos
         local attach = game.ReplicatedStorage.Assets.maps.slide.TeleMap.Attachment
         local mesh = game.ReplicatedStorage.Assets.maps.slide.TeleMap.Mesh
@@ -1073,40 +1111,11 @@ local Button = Mob_Spawner:Button({
     end
 })
 
-Dial_Spawner:Paragraph({
-    Title = "WARNING",
-    Desc = "All progress in unfinished!"
-})
-
-local dialogue_model = nil
-local dialogue_state = 0
-
-local Dropdown = Dial_Spawner:Dropdown({
-    Title = "Select Model",
-    Values = {
-        "Dr. Smar"
-    },
-    Callback = function(selected)
-        if Selected == "Dr. Smar" then
-            dialogue_model = selected
-
-            local smar = game.ReplicatedStorage.Assets.maps.eggy["Dr. Smar"]:Clone()
-            smar.Parent = workspace
-            smar.PivotTo(workspace.char.CFrame+Vector3.new(4,1.5,0))
-        end
-    end
-})
-
-local Button = Dial_Spawner:Button({
-    Title = "Create",
-    Callback = function()
-        if dialogue_model == "Dr. Smar" then
-
-        end
-    end
-})
-
 local ss = game.SoundService
+
+Preferences:Section({
+    Title = "Sound"
+})
 
 local Slider = Preferences:Slider({
     Title = "Music",
@@ -1149,7 +1158,158 @@ local Slider = Preferences:Slider({
 })
 
 Preferences:Section({
+    Title = "Hub"
+})
+
+local Button = Preferences:Button({
+    Title = "Unlock 1 Barrier in Hub",
+    Callback = function()
+        local tw = game:GetService("TweenService")
+
+        local unlock1 = workspace.hub.unlock1
+
+        tw:Create(workspace.char, TweenInfo.new(0.3, Enum.EasingStyle.Quad, Enum.EasingDirection.InOut), {
+            ["CFrame"] = unlock1.CFrame
+        }):Play()
+        task.wait(0.3)
+        unlock1.pcl:Emit(2)
+        game.Players.LocalPlayer.PlayerScripts.CharacterScript.unlockdoor:Play()
+        unlock1:Destroy()
+    end
+})
+
+local Button = Preferences:Button({
+    Title = "Unlock 2 Barrier in Hub",
+    Callback = function()
+        local tw = game:GetService("TweenService")
+
+        local unlock2 = workspace.hub.unlock2
+
+        tw:Create(workspace.char, TweenInfo.new(0.3, Enum.EasingStyle.Quad, Enum.EasingDirection.InOut), {
+        ["CFrame"] = unlock2.CFrame
+        }):Play()
+        task.wait(0.3)
+        unlock2.pcl:Emit(2)
+        game.Players.LocalPlayer.PlayerScripts.CharacterScript.unlockdoor:Play()
+        unlock2:Destroy()
+    end
+})
+
+local Button = Preferences:Button({
+    Title = "Unlock 3 Barrier in Hub",
+    Callback = function()
+        local tw = game:GetService("TweenService")
+
+        local unlock3 = workspace.hub.unlock3
+
+        tw:Create(workspace.char, TweenInfo.new(0.3, Enum.EasingStyle.Quad, Enum.EasingDirection.InOut), {
+        ["CFrame"] = unlock3.CFrame
+        }):Play()
+        task.wait(0.3)
+        unlock3.pcl:Emit(2)
+        game.Players.LocalPlayer.PlayerScripts.CharacterScript.unlockdoor:Play()
+        unlock3:Destroy()
+    end
+})
+
+local Button = Preferences:Button({
+    Title = "Unlock 4 Barrier in Hub",
+    Callback = function()
+        local tw = game:GetService("TweenService")
+
+        local unlock4 = workspace.hub.unlock4
+
+        tw:Create(workspace.char, TweenInfo.new(0.3, Enum.EasingStyle.Quad, Enum.EasingDirection.InOut), {
+        ["CFrame"] = unlock4.CFrame
+        }):Play()
+        task.wait(0.3)
+        unlock4.pcl:Emit(2)
+        game.Players.LocalPlayer.PlayerScripts.CharacterScript.unlockdoor:Play()
+        unlock4:Destroy()
+    end
+})
+
+local Button = Preferences:Button({
+    Title = "Unlock 5 Barrier in Hub",
+    Callback = function()
+        local tw = game:GetService("TweenService")
+
+        local unlock5 = workspace.hub.unlock5
+
+        unlock5.pcl:Emit(2)
+        game.Players.LocalPlayer.PlayerScripts.CharacterScript.unlockdoor:Play()
+        unlock5:Destroy()
+    end
+})
+
+Preferences:Section({
     Title = "Other"
+})
+
+local Toggle = Preferences:Toggle({
+    Title = "No Sunbits",
+    Value = false,
+    Callback = function(state)
+        if state == false then
+            local sunbits = game.ReplicatedStorage.Assets.push.sunbit
+            sunbits.Anchored = false
+            sunbits.Transparency = 0
+        end
+        if state == true then
+            local sunbits = game.ReplicatedStorage.Assets.push.sunbit
+            sunbits.Anchored = true
+            sunbits.Transparency = 0.5
+        end
+    end
+})
+
+Preferences:Section({
+    Title = "Character"
+})
+
+local Toggle = Preferences:Toggle({
+    Title = "Character Debug Mode",
+    Value = false,
+    Callback = function(state)
+        if state == true then
+            print("deb")
+            local debug = Instance.new("ConeHandleAdornment")
+            debug.Adornee = workspace.char
+            debug.Parent = workspace.char
+
+            workspace.char.Shape = "Block"
+            workspace.char.Transparency = 0.5
+            workspace.char.Center.Visible = true
+        end
+        if state == false then
+            workspace.char.ConeHandleAdornment:Destroy()
+
+            workspace.char.Shape = "Ball"
+            workspace.char.Transparency = 1
+            workspace.char.Center.Visible = false
+        end
+    end
+})
+
+local Input = Preferences:Input({
+    Title = "Custom Text Under Head",
+    Callback = function(text)
+            workspace.vis.head.BillboardGui.Enabled = true
+            workspace.vis.head.BillboardGui.AlwaysOnTop = true
+            workspace.vis.head.BillboardGui.user.Visible = false
+            workspace.vis.head.BillboardGui.display.Text = text
+
+    end
+})
+local Button = Preferences:Button({
+    Title = "Disable Custom Text Under Head",
+    Callback = function()
+            workspace.vis.head.BillboardGui.Enabled = false
+    end
+})
+
+Preferences:Section({
+    Title = "Game"
 })
 
 local Button = Preferences:Button({
@@ -1185,40 +1345,6 @@ local Button = Preferences:Button({
                     })
     end
 })
-local Button = Preferences:Button({
-    Title = "Disable DIAGEN 64",
-    Callback = function()
-                            local Popup = WindUI:Popup({
-                        Title = "DIAGEN 64",
-                        Icon = "rbxassetid://128620314150520", -- lucide icon or "rbxassetid://". optional
-                        Content = "You really want disable DIAGEN 64???",
-                        Buttons = {
-                        {
-                             Title = "Yes",
-                             Icon = "check", -- optional
-                             Variant = "Primary", -- "Primary", "Secondary", "Tertiary". optional
-                             Callback = function()
-                                print("Proceeding...")
-                                    Window:Destroy()
-                            end
-                        },
-                        {
-                            Title = "No",
-                            Icon = "x", -- optional
-                            Variant = "Secondary", -- optional
-                            Callback = function()
-                               print("Cancelled")
-                            end
-                        }
-                       }
-                    })
-    end
-})
-
-Manip:Section({
-    Title = "Player Manipulations"
-})
-
 
 local Button = Manip:Button({
     Title = "Start BFMA [BIG FORCE MIDDLE ABUSING]",
@@ -1323,89 +1449,22 @@ local Button = Manip:Button({
       workspace.char.VectorForce.RelativeTo = "World"
     end
 })
-
 local Toggle = Manip:Toggle({
-    Title = "Character Debug Mode [INDEV]",
+    Title = "Touch Part Abuse",
     Value = false,
     Callback = function(state)
         if state == true then
-            print("deb")
-            if workspace:FindFirstChild("vis") and workspace.vis:FindFirstChild("trs") then
-                local vis = workspace.vis
-                for i5, v5 in pairs(workspace.vis:GetChildren()) do
-                    if v5.ClassName == "MeshPart" then
-                        v5.Transparency = 1
-                        vis.head.Beam.Enabled = false
-                        vis.head.face.Transparency = 1
-                        if vis.trs:FindFirstChild("hat") then
-                            vis.trs.hat.Transparency = 1
-                        end
-
-                        if vis.trs:FindFirstChild("pack") then
-                            vis.trs.pack.CFrame += Vector3.new(6000,6000,6000) 
-                            vis.trs.bt1.CFrame += Vector3.new(6000,6000,6000) 
-                            vis.trs.bt2.CFrame += Vector3.new(6000,6000,6000) 
-                            vis.trs.bt3.CFrame += Vector3.new(6000,6000,6000) 
-                            vis.trs.bt4.CFrame += Vector3.new(6000,6000,6000) 
-                        end
-
-                    end
-                end
-            end
-            local debug = Instance.new("ConeHandleAdornment")
-            debug.Parent = workspace.char
-            debug.CFrame = Vector3.new(0, 0, -5)
-
-            workspace.char.Shape = "Block"
-            workspace.char.Transparency = 0.5
-            workspace.char.Center.Visible = true
+            local touchpart = workspace.char.Touch
+            touchpart.Transparency = 0.3
+            touchpart.Size = Vector3.new(5,5,5)
+            touchpart.CanCollide = true
         end
         if state == false then
-            if workspace:FindFirstChild("vis") and workspace.vis:FindFirstChild("trs") then
-                local vis = workspace.vis
-                for i6, v6 in pairs(workspace.vis:GetChildren()) do
-                    if v6.ClassName == "MeshPart" then
-                        v6.Transparency = 0
-                        vis.head.Beam.Enabled = false
-                        vis.head.face.Transparency = 0
-                        if vis.trs:FindFirstChild("hat") then
-                            vis.trs.hat.Transparency = 0
-                        end
-
-                        if vis.trs:FindFirstChild("pack") then
-                            vis.trs.pack.CFrame -= Vector3.new(6000,6000,6000) 
-                            vis.trs.bt1.CFrame -= Vector3.new(6000,6000,6000) 
-                            vis.trs.bt2.CFrame -= Vector3.new(6000,6000,6000) 
-                            vis.trs.bt3.CFrame -= Vector3.new(6000,6000,6000) 
-                            vis.trs.bt4.CFrame -= Vector3.new(6000,6000,6000) 
-                        end
-
-                    end
-                end
-            end
-            workspace.char.ConeHandleAdornment:Destroy()
-
-            workspace.char.Shape = "Block"
-            workspace.char.Transparency = 1
-            workspace.char.Center.Visible = false
+            local touchpart = workspace.char.Touch
+            touchpart.Transparency = 1
+            touchpart.Size = Vector3.new(0.001,0.001,0.001)
+            touchpart.CanCollide = false
         end
-    end
-})
-
-local Input = Manip:Input({
-    Title = "Custom Text Under Head",
-    Callback = function(text)
-            workspace.vis.head.BillboardGui.Enabled = true
-            workspace.vis.head.BillboardGui.AlwaysOnTop = true
-            workspace.vis.head.BillboardGui.user.Visible = false
-            workspace.vis.head.BillboardGui.display.Text = text
-
-    end
-})
-local Button = Manip:Button({
-    Title = "Disable Custom Text Under Head",
-    Callback = function()
-            workspace.vis.head.BillboardGui.Enabled = false
     end
 })
 
